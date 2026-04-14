@@ -2,7 +2,7 @@ set(MUSIC_SURFER_CORE_SOURCES
     core/Track.cpp
     services/LibraryManager.cpp
     services/AudioPlayer.cpp
-    services/PlaylistManager.cpp
+    services/PlaylistManagerImpl.cpp
     audio/AudioEngine.cpp
     ui/MainWindow.cpp
     database/Database.cpp
