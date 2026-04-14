@@ -2,31 +2,45 @@
 
 #include "core/Track.hpp"
 
+#include <chrono>
 #include <optional>
 
 namespace music_surfer::services
 {
 /**
- * @brief Service interface for playback control independent of audio backend.
- *
- * Lifecycle: backend implementations hold native resources via RAII and are
- * consumed as interface pointers to avoid concrete engine coupling.
+ * @brief Playback service with basic transport controls independent of backend.
  */
 class AudioPlayer
 {
 public:
-    virtual ~AudioPlayer() = default;
+    enum class State
+    {
+        Stopped,
+        Playing,
+        Paused,
+    };
 
     /** @brief Load a track for future playback without starting transport. */
-    virtual void load(const core::Track& track) = 0;
+    void load(const core::Track& track);
     /** @brief Start playback of the loaded track. */
-    virtual void play() = 0;
+    void play();
     /** @brief Pause playback while preserving current position. */
-    virtual void pause() = 0;
-    /** @brief Stop playback and reset transport state. */
-    virtual void stop() = 0;
+    void pause();
+    /** @brief Stop playback and reset transport position. */
+    void stop();
+    /** @brief Seek to an absolute position (clamped to track duration). */
+    void seek(std::chrono::milliseconds position);
 
     /** @brief Return currently loaded track, if any. */
-    virtual std::optional<core::Track> currentTrack() const = 0;
+    std::optional<core::Track> currentTrack() const;
+    /** @brief Return current transport state. */
+    State state() const noexcept;
+    /** @brief Return current playback position. */
+    std::chrono::milliseconds position() const noexcept;
+
+private:
+    std::optional<core::Track> loadedTrack_;
+    State state_{State::Stopped};
+    std::chrono::milliseconds position_{0};
 };
 } // namespace music_surfer::services

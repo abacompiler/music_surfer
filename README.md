@@ -34,3 +34,15 @@ ctest --test-dir build -C Release --output-on-failure
 - Main app target: `music_surfer_app`
 - Test target: `music_surfer_tests` (when `MUSIC_SURFER_BUILD_TESTS=ON`)
 - Core module library: `music_surfer_core`
+
+
+## Milestone build logs
+
+Clean configure/build (and where relevant test) outputs for Milestones A-F are recorded under:
+
+- `build_logs/milestone_A.log`
+- `build_logs/milestone_B.log`
+- `build_logs/milestone_C.log`
+- `build_logs/milestone_D.log`
+- `build_logs/milestone_E.log`
+- `build_logs/milestone_F.log`

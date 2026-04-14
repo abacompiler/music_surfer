@@ -1,0 +1,25 @@
+-- The CXX compiler identification is GNU 13.3.0
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Found SQLite3: /usr/include (found version "3.45.1") 
+-- Configuring done (0.6s)
+-- Generating done (0.0s)
+-- Build files have been written to: /workspace/music_surfer/build_B
+[  7%] Building CXX object CMakeFiles/music_surfer_core.dir/src/core/Track.cpp.o
+[ 23%] Building CXX object CMakeFiles/music_surfer_core.dir/src/services/LibraryManager.cpp.o
+[ 30%] Building CXX object CMakeFiles/music_surfer_core.dir/src/services/AudioPlayer.cpp.o
+[ 15%] Building CXX object CMakeFiles/music_surfer_core.dir/src/database/Database.cpp.o
+[ 38%] Building CXX object CMakeFiles/music_surfer_core.dir/src/utils/MetadataParser.cpp.o
+[ 46%] Building CXX object CMakeFiles/music_surfer_core.dir/src/services/PlaylistManager.cpp.o
+[ 53%] Building CXX object CMakeFiles/music_surfer_core.dir/src/audio/AudioEngine.cpp.o
+[ 61%] Building CXX object CMakeFiles/music_surfer_core.dir/src/utils/Logger.cpp.o
+[ 69%] Building CXX object CMakeFiles/music_surfer_core.dir/src/utils/FileSystemScanner.cpp.o
+[ 76%] Building CXX object CMakeFiles/music_surfer_core.dir/src/ui/MainWindow.cpp.o
+[ 84%] Linking CXX static library libmusic_surfer_core.a
+[ 84%] Built target music_surfer_core
+[ 92%] Building CXX object CMakeFiles/music_surfer_app.dir/src/main.cpp.o
+[100%] Linking CXX executable music_surfer_app
+[100%] Built target music_surfer_app
