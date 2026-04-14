@@ -93,6 +93,7 @@ void testLibraryManagerSyncFlow()
     manager.setMetadataReader(parser);
 
     const auto stats = manager.syncLibrary(root);
+    (void)stats;
     assert(stats.filesDiscovered == 2);
     assert(stats.parsedTracks == 2);
     assert(stats.persistedTracks == 2);
