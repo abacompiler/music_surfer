@@ -1,0 +1,81 @@
+{
+  "version": 5,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 20,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "base",
+      "hidden": true,
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/${presetName}",
+      "cacheVariables": {
+        "CMAKE_CXX_STANDARD": "17",
+        "MUSIC_SURFER_BUILD_TESTS": "ON"
+      }
+    },
+    {
+      "name": "linux-debug",
+      "inherits": "base",
+      "displayName": "Linux Debug",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    },
+    {
+      "name": "linux-release",
+      "inherits": "base",
+      "displayName": "Linux Release",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    },
+    {
+      "name": "linux-asan",
+      "inherits": "linux-debug",
+      "displayName": "Linux Debug + Sanitizers",
+      "cacheVariables": {
+        "MUSIC_SURFER_ENABLE_SANITIZERS": "ON"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "build-debug",
+      "configurePreset": "linux-debug"
+    },
+    {
+      "name": "build-release",
+      "configurePreset": "linux-release"
+    },
+    {
+      "name": "build-asan",
+      "configurePreset": "linux-asan"
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "test-debug",
+      "configurePreset": "linux-debug",
+      "output": {
+        "outputOnFailure": true
+      }
+    },
+    {
+      "name": "test-release",
+      "configurePreset": "linux-release",
+      "output": {
+        "outputOnFailure": true
+      }
+    },
+    {
+      "name": "test-asan",
+      "configurePreset": "linux-asan",
+      "output": {
+        "outputOnFailure": true
+      }
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+add_executable(music_surfer_tests test_smoke.cpp)
+target_link_libraries(music_surfer_tests PRIVATE music_surfer_core)
+target_include_directories(music_surfer_tests PRIVATE ${PROJECT_SOURCE_DIR}/src ${PROJECT_SOURCE_DIR}/tests)
+music_surfer_set_project_warnings(music_surfer_tests)
+music_surfer_enable_sanitizers(music_surfer_tests)
+
+add_executable(music_surfer_database_tests test_database.cpp)
+target_link_libraries(music_surfer_database_tests PRIVATE music_surfer_core)
+target_include_directories(music_surfer_database_tests PRIVATE ${PROJECT_SOURCE_DIR}/src ${PROJECT_SOURCE_DIR}/tests)
+music_surfer_set_project_warnings(music_surfer_database_tests)
+music_surfer_enable_sanitizers(music_surfer_database_tests)
+
+add_executable(music_surfer_milestone_tests test_milestones.cpp)
+target_link_libraries(music_surfer_milestone_tests PRIVATE music_surfer_core)
+target_include_directories(music_surfer_milestone_tests PRIVATE ${PROJECT_SOURCE_DIR}/src ${PROJECT_SOURCE_DIR}/tests)
+music_surfer_set_project_warnings(music_surfer_milestone_tests)
+music_surfer_enable_sanitizers(music_surfer_milestone_tests)
+
+add_test(NAME music_surfer_smoke_test COMMAND music_surfer_tests)
+add_test(NAME music_surfer_database_test COMMAND music_surfer_database_tests)
+add_test(NAME music_surfer_milestone_test COMMAND music_surfer_milestone_tests)
