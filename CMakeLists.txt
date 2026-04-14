@@ -13,9 +13,13 @@ option(MUSIC_SURFER_BUILD_TESTS "Build test targets" ON)
 set(MUSIC_SURFER_CORE_SOURCES
     src/core/Track.cpp
     src/services/LibraryManager.cpp
+    src/services/AudioPlayer.cpp
+    src/services/PlaylistManager.cpp
     src/audio/AudioEngine.cpp
     src/ui/MainWindow.cpp
     src/database/Database.cpp
+    src/utils/FileSystemScanner.cpp
+    src/utils/MetadataParser.cpp
     src/utils/Logger.cpp
 )
 
