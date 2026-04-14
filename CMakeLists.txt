@@ -7,7 +7,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 option(MUSIC_SURFER_ENABLE_JUCE "Enable JUCE integration" OFF)
 option(MUSIC_SURFER_ENABLE_TAGLIB "Enable TagLib integration" OFF)
-option(MUSIC_SURFER_ENABLE_SQLITE "Enable SQLite integration" OFF)
+option(MUSIC_SURFER_ENABLE_SQLITE "Enable SQLite integration" ON)
 option(MUSIC_SURFER_BUILD_TESTS "Build test targets" ON)
 
 set(MUSIC_SURFER_CORE_SOURCES
@@ -48,6 +48,8 @@ if(MUSIC_SURFER_ENABLE_SQLITE)
     find_package(SQLite3 REQUIRED)
     target_compile_definitions(music_surfer_core PUBLIC MUSIC_SURFER_HAS_SQLITE=1)
     target_link_libraries(music_surfer_core PUBLIC SQLite::SQLite3)
+else()
+    target_compile_definitions(music_surfer_core PUBLIC MUSIC_SURFER_HAS_SQLITE=0)
 endif()
 
 add_executable(music_surfer_app src/main.cpp)
@@ -70,5 +72,15 @@ if(MUSIC_SURFER_BUILD_TESTS)
             ${PROJECT_SOURCE_DIR}/tests
     )
 
+    add_executable(music_surfer_database_tests tests/test_database.cpp)
+    target_link_libraries(music_surfer_database_tests PRIVATE music_surfer_core)
+
+    target_include_directories(music_surfer_database_tests
+        PRIVATE
+            ${PROJECT_SOURCE_DIR}/src
+            ${PROJECT_SOURCE_DIR}/tests
+    )
+
     add_test(NAME music_surfer_smoke_test COMMAND music_surfer_tests)
+    add_test(NAME music_surfer_database_test COMMAND music_surfer_database_tests)
 endif()
