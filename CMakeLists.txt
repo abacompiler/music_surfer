@@ -81,6 +81,17 @@ if(MUSIC_SURFER_BUILD_TESTS)
             ${PROJECT_SOURCE_DIR}/tests
     )
 
+
+    add_executable(music_surfer_milestone_tests tests/test_milestones.cpp)
+    target_link_libraries(music_surfer_milestone_tests PRIVATE music_surfer_core)
+
+    target_include_directories(music_surfer_milestone_tests
+        PRIVATE
+            ${PROJECT_SOURCE_DIR}/src
+            ${PROJECT_SOURCE_DIR}/tests
+    )
+
     add_test(NAME music_surfer_smoke_test COMMAND music_surfer_tests)
     add_test(NAME music_surfer_database_test COMMAND music_surfer_database_tests)
+    add_test(NAME music_surfer_milestone_test COMMAND music_surfer_milestone_tests)
 endif()

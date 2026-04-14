@@ -1,15 +1,26 @@
 #include "database/Database.hpp"
+#include "services/AudioPlayer.hpp"
+#include "services/LibraryManager.hpp"
+#include "ui/MainWindow.hpp"
+#include "utils/FileSystemScanner.hpp"
+#include "utils/MetadataParser.hpp"
 
 #include <iostream>
+#include <memory>
 
 int main()
 {
-    music_surfer::database::Database database("music_surfer.db");
-    if (!database.isConnected())
-    {
-        std::cerr << "Failed to initialize database at startup" << std::endl;
-    }
+    auto repository = std::make_shared<music_surfer::database::Database>("music_surfer.db");
 
-    std::cout << "MusicSurfer starter app" << std::endl;
+    music_surfer::services::LibraryManager libraryManager;
+    libraryManager.setRepository(repository);
+    libraryManager.setFileScanner(std::make_shared<music_surfer::utils::FileSystemScanner>());
+    libraryManager.setMetadataReader(std::make_shared<music_surfer::utils::MetadataParser>());
+
+    music_surfer::services::AudioPlayer audioPlayer;
+    music_surfer::ui::MainWindow mainWindow;
+    mainWindow.bindServices(&libraryManager, &audioPlayer);
+
+    std::cout << "MusicSurfer starter app (window + services wired)" << std::endl;
     return 0;
 }

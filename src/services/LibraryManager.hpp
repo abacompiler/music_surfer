@@ -5,37 +5,58 @@
 #include "core/Track.hpp"
 #include "services/Abstractions.hpp"
 
+#include <filesystem>
 #include <memory>
 #include <optional>
+#include <unordered_map>
 
 namespace music_surfer::services
 {
 /**
- * @brief Service interface for coordinating library ingest and retrieval.
+ * @brief Default service for coordinating library ingest and retrieval.
  *
- * Lifecycle: implementations are long-lived RAII objects created by composition
- * roots and wired with abstraction dependencies through smart pointers.
+ * Lifecycle: long-lived RAII object created by composition roots and wired with
+ * abstraction dependencies through smart pointers.
  */
 class LibraryManager
 {
 public:
-    virtual ~LibraryManager() = default;
+    struct SyncStats
+    {
+        std::size_t filesDiscovered{0};
+        std::size_t parsedTracks{0};
+        std::size_t persistedTracks{0};
+    };
+
+    LibraryManager() = default;
 
     /** @brief Attach repository dependency used for library persistence. */
-    virtual void setRepository(std::shared_ptr<ITrackRepository> repository) = 0;
+    void setRepository(std::shared_ptr<ITrackRepository> repository);
     /** @brief Attach file scanner used for local file discovery. */
-    virtual void setFileScanner(std::shared_ptr<IFileScanner> scanner) = 0;
+    void setFileScanner(std::shared_ptr<IFileScanner> scanner);
     /** @brief Attach metadata reader used for file tag extraction. */
-    virtual void setMetadataReader(std::shared_ptr<IMetadataReader> reader) = 0;
+    void setMetadataReader(std::shared_ptr<IMetadataReader> reader);
 
     /** @brief Add or update an artist aggregate in the library catalog. */
-    virtual void upsertArtist(const core::Artist& artist) = 0;
+    void upsertArtist(const core::Artist& artist);
     /** @brief Add or update an album aggregate in the library catalog. */
-    virtual void upsertAlbum(const core::Album& album) = 0;
+    void upsertAlbum(const core::Album& album);
     /** @brief Add or update a track aggregate in the library catalog. */
-    virtual void upsertTrack(const core::Track& track) = 0;
+    void upsertTrack(const core::Track& track);
 
     /** @brief Retrieve a known track by immutable ID. */
-    virtual std::optional<core::Track> findTrack(const core::TrackId& id) const = 0;
+    std::optional<core::Track> findTrack(const core::TrackId& id) const;
+
+    /** @brief Scan files and persist parsed tracks through the repository. */
+    SyncStats syncLibrary(const std::filesystem::path& root);
+
+private:
+    std::shared_ptr<ITrackRepository> repository_;
+    std::shared_ptr<IFileScanner> scanner_;
+    std::shared_ptr<IMetadataReader> reader_;
+
+    std::unordered_map<core::ArtistId, core::Artist> artists_;
+    std::unordered_map<core::AlbumId, core::Album> albums_;
+    std::unordered_map<core::TrackId, core::Track> tracks_;
 };
 } // namespace music_surfer::services
