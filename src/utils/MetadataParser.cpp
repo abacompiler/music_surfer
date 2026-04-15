@@ -1,6 +1,12 @@
 #include "utils/MetadataParser.hpp"
 
+#include <chrono>
 #include <string>
+
+#if MUSIC_SURFER_HAS_TAGLIB
+#include <taglib/fileref.h>
+#include <taglib/tag.h>
+#endif
 
 namespace music_surfer::utils
 {
@@ -17,8 +23,51 @@ std::optional<core::Track> MetadataParser::parseTrack(const std::filesystem::pat
         return std::nullopt;
     }
 
-    // Real TagLib extraction can replace these fallback defaults.
-    core::Track track{"track:" + stem, stem, "artist:unknown", "album:unknown"};
+    std::string title = stem;
+#if MUSIC_SURFER_HAS_TAGLIB
+    std::string artist = "Unknown Artist";
+    std::string album = "Unknown Album";
+#else
+    std::string artist = "unknown";
+    std::string album = "unknown";
+#endif
+    std::chrono::milliseconds duration{0};
+
+#if MUSIC_SURFER_HAS_TAGLIB
+    const TagLib::FileRef fileRef(filePath.c_str());
+    if (!fileRef.isNull() && fileRef.tag() != nullptr)
+    {
+        const TagLib::Tag* tag = fileRef.tag();
+        const std::string parsedTitle = tag->title().to8Bit(true);
+        const std::string parsedArtist = tag->artist().to8Bit(true);
+        const std::string parsedAlbum = tag->album().to8Bit(true);
+
+        if (!parsedTitle.empty())
+        {
+            title = parsedTitle;
+        }
+        if (!parsedArtist.empty())
+        {
+            artist = parsedArtist;
+        }
+        if (!parsedAlbum.empty())
+        {
+            album = parsedAlbum;
+        }
+    }
+
+    if (!fileRef.isNull() && fileRef.audioProperties() != nullptr)
+    {
+        const int seconds = fileRef.audioProperties()->lengthInSeconds();
+        if (seconds > 0)
+        {
+            duration = std::chrono::seconds(seconds);
+        }
+    }
+#endif
+
+    core::Track track{"track:" + stem, title, "artist:" + artist, "album:" + album};
+    track.setDuration(duration);
     return track;
 }
 } // namespace music_surfer::utils
