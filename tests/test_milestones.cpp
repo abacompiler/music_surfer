@@ -75,6 +75,36 @@ void testScannerAndParserIntegration()
     std::filesystem::remove_all(root);
 }
 
+
+void testMetadataFallbackBehavior()
+{
+    const auto root = makeTempRoot();
+    const auto file = root / "nested" / "mystery_track.mp3";
+    {
+        std::ofstream(file) << "fake-audio-content";
+    }
+
+    music_surfer::utils::MetadataParser parser;
+    const auto parsed = parser.parseTrack(file);
+    assert(parsed.has_value());
+
+#if MUSIC_SURFER_HAS_TAGLIB
+    // With TagLib enabled, non-audio fixture files should still parse through robust fallbacks.
+    assert(parsed->title() == "mystery_track");
+    assert(parsed->artistId() == "artist:Unknown Artist");
+    assert(parsed->albumId() == "album:Unknown Album");
+    assert(parsed->duration() == std::chrono::milliseconds::zero());
+#else
+    // Preserve existing non-TagLib fallback path.
+    assert(parsed->title() == "mystery_track");
+    assert(parsed->artistId() == "artist:unknown");
+    assert(parsed->albumId() == "album:unknown");
+    assert(parsed->duration() == std::chrono::milliseconds::zero());
+#endif
+
+    std::filesystem::remove_all(root);
+}
+
 void testLibraryManagerSyncFlow()
 {
     const auto root = makeTempRoot();
@@ -149,6 +179,7 @@ void testUiPanelBindings()
 int main()
 {
     testScannerAndParserIntegration();
+    testMetadataFallbackBehavior();
     testLibraryManagerSyncFlow();
     testAudioTransportControls();
     testUiPanelBindings();
