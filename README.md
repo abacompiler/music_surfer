@@ -52,6 +52,23 @@ cmake --build build --config Release
 ctest --test-dir build -C Release --output-on-failure
 ```
 
+
+## Database location resolution
+
+At startup, `music_surfer_app` resolves the SQLite database file path in the following order:
+
+1. CLI argument: `--db-path <path>`
+2. Environment variable: `MUSIC_SURFER_DB_PATH`
+3. App config directory (with `music_surfer.db` appended):
+   - CLI argument: `--config-dir <dir>`
+   - Environment variable: `MUSIC_SURFER_CONFIG_DIR`
+4. Default user-local app data directory (with `MusicSurfer/music_surfer.db` appended):
+   - Linux: `$XDG_DATA_HOME` or `~/.local/share`
+   - macOS: `~/Library/Application Support`
+   - Windows: `%LOCALAPPDATA%` (fallback `%APPDATA%`)
+
+The app creates the selected database directory automatically before opening SQLite.
+
 ## Notes
 
 - Main app target: `music_surfer_app`
