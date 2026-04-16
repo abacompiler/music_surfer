@@ -24,6 +24,8 @@ public:
     virtual void addTrack(const core::PlaylistId& playlistId, const core::TrackId& trackId) = 0;
     /** @brief Remove all occurrences of a track from a playlist. */
     virtual void removeTrack(const core::PlaylistId& playlistId, const core::TrackId& trackId) = 0;
+    /** @brief Delete a playlist by immutable ID. */
+    virtual void deletePlaylist(const core::PlaylistId& playlistId) = 0;
 
     /** @brief Load a playlist by immutable ID. */
     virtual std::optional<core::Playlist> findPlaylist(const core::PlaylistId& id) const = 0;

@@ -21,9 +21,8 @@ int main()
     auto playlistManager = std::make_shared<music_surfer::services::PlaylistManagerImpl>(repository);
 
     music_surfer::services::AudioPlayer audioPlayer;
-    music_surfer::ui::MainWindow mainWindow;
-    mainWindow.bindServices(&libraryManager, &audioPlayer);
-    (void)playlistManager;
+    music_surfer::ui::MainWindow mainWindow(libraryManager, audioPlayer, *playlistManager);
+    (void)mainWindow;
 
     std::cout << "MusicSurfer starter app (window + services wired)" << std::endl;
     return 0;
