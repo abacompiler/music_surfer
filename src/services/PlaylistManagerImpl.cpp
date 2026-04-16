@@ -137,6 +137,16 @@ void PlaylistManagerImpl::removeTrack(const core::PlaylistId& playlistId, const 
     (void)database_->removeTrackFromPlaylist(playlistId, trackId);
 }
 
+void PlaylistManagerImpl::deletePlaylist(const core::PlaylistId& playlistId)
+{
+    if (!database_)
+    {
+        return;
+    }
+
+    (void)database_->deletePlaylist(playlistId);
+}
+
 std::optional<core::Playlist> PlaylistManagerImpl::findPlaylist(const core::PlaylistId& id) const
 {
     if (!database_)

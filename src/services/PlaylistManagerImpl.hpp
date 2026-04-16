@@ -15,6 +15,7 @@ public:
     core::PlaylistId createPlaylist(const std::string& name) override;
     void addTrack(const core::PlaylistId& playlistId, const core::TrackId& trackId) override;
     void removeTrack(const core::PlaylistId& playlistId, const core::TrackId& trackId) override;
+    void deletePlaylist(const core::PlaylistId& playlistId) override;
 
     std::optional<core::Playlist> findPlaylist(const core::PlaylistId& id) const override;
     std::vector<core::Playlist> listPlaylists() const override;

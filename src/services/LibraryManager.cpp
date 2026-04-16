@@ -48,6 +48,18 @@ std::optional<core::Track> LibraryManager::findTrack(const core::TrackId& id) co
     return std::nullopt;
 }
 
+std::vector<core::Track> LibraryManager::listTracks() const
+{
+    std::vector<core::Track> tracks;
+    tracks.reserve(tracks_.size());
+    for (const auto& [trackId, track] : tracks_)
+    {
+        (void)trackId;
+        tracks.push_back(track);
+    }
+    return tracks;
+}
+
 LibraryManager::SyncStats LibraryManager::syncLibrary(const std::filesystem::path& root)
 {
     SyncStats stats;

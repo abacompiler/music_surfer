@@ -9,6 +9,7 @@
 #include <memory>
 #include <optional>
 #include <unordered_map>
+#include <vector>
 
 namespace music_surfer::services
 {
@@ -46,6 +47,8 @@ public:
 
     /** @brief Retrieve a known track by immutable ID. */
     std::optional<core::Track> findTrack(const core::TrackId& id) const;
+    /** @brief Return all known tracks currently in memory. */
+    std::vector<core::Track> listTracks() const;
 
     /** @brief Scan files and persist parsed tracks through the repository. */
     SyncStats syncLibrary(const std::filesystem::path& root);
