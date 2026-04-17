@@ -6,6 +6,8 @@ set(MUSIC_SURFER_CORE_SOURCES
     audio/AudioEngine.cpp
     database/Database.cpp
     ui/MainWindow.cpp
+    ui/JuceMainComponent.cpp
+    ui/JuceMainWindow.cpp
     utils/FileSystemScanner.cpp
     utils/MetadataParser.cpp
     utils/Logger.cpp
@@ -45,12 +47,27 @@ else()
     target_compile_definitions(music_surfer_core PUBLIC MUSIC_SURFER_HAS_SQLITE=0)
 endif()
 
+
+if(MUSIC_SURFER_ENABLE_JUCE)
+    find_package(JUCE CONFIG REQUIRED)
+    target_compile_definitions(music_surfer_core PUBLIC MUSIC_SURFER_HAS_JUCE=1)
+else()
+    target_compile_definitions(music_surfer_core PUBLIC MUSIC_SURFER_HAS_JUCE=0)
+endif()
+
 # =========================
 # APP
 # =========================
 add_executable(music_surfer_app main.cpp)
 
 target_link_libraries(music_surfer_app PRIVATE music_surfer_core)
+
+if(MUSIC_SURFER_ENABLE_JUCE)
+    target_link_libraries(music_surfer_app PRIVATE
+        juce::juce_gui_basics
+        juce::juce_gui_extra
+    )
+endif()
 
 target_include_directories(music_surfer_app PRIVATE ${PROJECT_SOURCE_DIR}/src)
 
