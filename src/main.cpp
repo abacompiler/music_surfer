@@ -23,11 +23,27 @@ constexpr std::string_view kConfigDirEnvVar = "MUSIC_SURFER_CONFIG_DIR";
 
 std::optional<std::filesystem::path> nonEmptyPathFromEnv(std::string_view envVar)
 {
+#if defined(_WIN32)
+    char* value = nullptr;
+    std::size_t valueLength = 0;
+    if (_dupenv_s(&value, &valueLength, envVar.data()) == 0 && value != nullptr)
+    {
+        std::optional<std::filesystem::path> envPath;
+        if (*value != '\0')
+        {
+            envPath = std::filesystem::path(value);
+        }
+        std::free(value);
+        return envPath;
+    }
+    return std::nullopt;
+#else
     if (const char* value = std::getenv(envVar.data()); value != nullptr && *value != '\0')
     {
         return std::filesystem::path(value);
     }
     return std::nullopt;
+#endif
 }
 
 std::optional<std::filesystem::path> parseCliPathOption(int argc, char** argv, std::string_view optionName)
