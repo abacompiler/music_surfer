@@ -156,7 +156,7 @@ std::vector<std::string> argsFromArgv(int argc, char** argv)
     }
     return args;
 }
-
+}
 #if MUSIC_SURFER_HAS_JUCE
 std::vector<std::string> argsFromCommandLine(const juce::String& commandLine)
 {
