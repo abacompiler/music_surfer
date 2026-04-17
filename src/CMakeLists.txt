@@ -5,6 +5,7 @@ set(MUSIC_SURFER_CORE_SOURCES
     services/PlaylistManagerImpl.cpp
     audio/AudioEngine.cpp
     database/Database.cpp
+    ui/MainWindow.cpp
     utils/FileSystemScanner.cpp
     utils/MetadataParser.cpp
     utils/Logger.cpp
